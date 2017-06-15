@@ -24,60 +24,73 @@
 	brushs["balldropWarn3"] := Gdip_BrushCreateSolid("0x55eeccea") ;
 	brushs["balldropWarn4"] := Gdip_BrushCreateSolid("0x55ffaaea") ;
 
-	;colors: 1:red, 2:yellow, 3:green, 4:blue
-	bitmaps:=Object()
-	loop 4
-	{
-		bitmaps["Ball" a_index] := Gdip_CreateBitmapFromFile(A_ScriptDir "\Pictures\Ball_" _colors[A_Index] ".png")
-		bitmaps["Field_blocker_" a_index] := Gdip_CreateBitmapFromFile(A_ScriptDir "\Pictures\Field_blocker_" _colors[A_Index] ".png")
-		bitmaps["Field_paint_" a_index] := Gdip_CreateBitmapFromFile(A_ScriptDir "\Pictures\Field_paint_" _colors[A_Index] ".png")
-	}
-	bitmaps["Ball0"] := Gdip_CreateBitmapFromFile(A_ScriptDir "\Pictures\Ball_exploded.png")
-	bitmaps["Field_Empty"] := Gdip_CreateBitmapFromFile(A_ScriptDir "\Pictures\Field_Empty.bmp")
-	bitmaps["Field_BallDrop_Empty_r"] := Gdip_CreateBitmapFromFile(A_ScriptDir "\Pictures\Field_BallDrop_Empty_r.bmp")
-	bitmaps["Field_BallDrop_Empty_l"] := Gdip_CreateBitmapFromFile(A_ScriptDir "\Pictures\Field_BallDrop_Empty_l.bmp")
-	bitmaps["Field_BallDrop_Empty_rl"] := Gdip_CreateBitmapFromFile(A_ScriptDir "\Pictures\Field_BallDrop_Empty_rl.bmp")
-	bitmaps["Field_Rotator"] := Gdip_CreateBitmapFromFile(A_ScriptDir "\Pictures\Field_Rotator.png")
-	bitmaps["Field_Rotator_blown"] := Gdip_CreateBitmapFromFile(A_ScriptDir "\Pictures\Field_Rotator_blown.png")
-	loop 8
-	{
-		bitmaps["Field_Rotator_" A_Index*10] := Gdip_CreateBitmapFromFile(A_ScriptDir "\Pictures\Field_Rotator_" A_Index*10 ".png")
-		bitmaps["Field_Rotator_blown_" A_Index*10] := Gdip_CreateBitmapFromFile(A_ScriptDir "\Pictures\Field_Rotator_blown_" A_Index*10 ".png")
-	}
-	bitmaps["Field_Conn_r"] := Gdip_CreateBitmapFromFile(A_ScriptDir "\Pictures\Field_Conn_r.png")
-	bitmaps["Field_Conn_l"] := Gdip_CreateBitmapFromFile(A_ScriptDir "\Pictures\Field_Conn_l.png")
-	bitmaps["Field_Conn_u"] := Gdip_CreateBitmapFromFile(A_ScriptDir "\Pictures\Field_Conn_u.png")
-	bitmaps["Field_Conn_d"] := Gdip_CreateBitmapFromFile(A_ScriptDir "\Pictures\Field_Conn_d.png")
-	bitmaps["Field_Conn_b"] := Gdip_CreateBitmapFromFile(A_ScriptDir "\Pictures\Field_Conn_b.png")
-	bitmaps["Field_Conn_h"] := Gdip_CreateBitmapFromFile(A_ScriptDir "\Pictures\Field_Conn_h.png")
-	bitmaps["Field_Conn_v"] := Gdip_CreateBitmapFromFile(A_ScriptDir "\Pictures\Field_Conn_v.png")
-	bitmaps["Field_Arrow_r"] := Gdip_CreateBitmapFromFile(A_ScriptDir "\Pictures\Field_Arrow_r.png")
-	bitmaps["Field_Arrow_l"] := Gdip_CreateBitmapFromFile(A_ScriptDir "\Pictures\Field_Arrow_l.png")
-	bitmaps["Field_Arrow_u"] := Gdip_CreateBitmapFromFile(A_ScriptDir "\Pictures\Field_Arrow_u.png")
-	bitmaps["Field_Arrow_d"] := Gdip_CreateBitmapFromFile(A_ScriptDir "\Pictures\Field_Arrow_d.png")
-	bitmaps["Field_Teleporter_h"] := Gdip_CreateBitmapFromFile(A_ScriptDir "\Pictures\Field_Teleporter_h.png")
-	bitmaps["Field_Teleporter_v"] := Gdip_CreateBitmapFromFile(A_ScriptDir "\Pictures\Field_Teleporter_v.png")
-	bitmaps["Field_Teleporter_b"] := Gdip_CreateBitmapFromFile(A_ScriptDir "\Pictures\Field_Teleporter_b.png")
-	bitmaps["Field_BallDrop_Conn"] := Gdip_CreateBitmapFromFile(A_ScriptDir "\Pictures\Field_BallDrop_Conn.png")
-	bitmaps["Field_BallDrop_Conn_u"] := Gdip_CreateBitmapFromFile(A_ScriptDir "\Pictures\Field_BallDrop_Conn_u.png")
-	bitmaps["Field_info_Time_display"] := Gdip_CreateBitmapFromFile(A_ScriptDir "\Pictures\Field_info_Time_display.png")
-	bitmaps["Field_info_NextBall"] := Gdip_CreateBitmapFromFile(A_ScriptDir "\Pictures\Field_info_NextBall.png")
-	bitmaps["Field_info_ballColorChallenge"] := Gdip_CreateBitmapFromFile(A_ScriptDir "\Pictures\Field_info_ballColorChallenge.png")
-	bitmaps["Field_info_rotatorColorChallenge"] := Gdip_CreateBitmapFromFile(A_ScriptDir "\Pictures\Field_info_rotatorColorChallenge.png")
-	loop 5
-	{
-		bitmaps["Field_info_movableBalls_" A_Index-1] := Gdip_CreateBitmapFromFile(A_ScriptDir "\Pictures\Field_info_movableBalls_" A_Index-1 ".png")
-	}
-		
-	loop 9
-		bitmaps["Field_Rotator_explode_" a_index] := Gdip_CreateBitmapFromFile(A_ScriptDir "\Pictures\Field_Rotator_explode_" A_Index ".png")
 	
 
 	_share.MainGuiDC := GetDC(_share.MainGuiHWND)
 	
 }
 
-
+draw_initDesign()
+{
+	global
+	local onename, onebitmap, designpath
+	_share.needInitDesign:=false
+	
+	for onename, onebitmap in bitmaps
+	{
+		Gdip_DisposeImage(onebitmap)
+	}
+	
+	;colors: 1:red, 2:yellow, 3:green, 4:blue
+	bitmaps:=Object()
+	designpath:= A_ScriptDir "\Pictures\" _share.opticalDesign  
+	loop 4
+	{
+		bitmaps["Ball" a_index] := Gdip_CreateBitmapFromFile(designpath "\Ball_" _colors[A_Index] ".png")
+		bitmaps["Field_blocker_" a_index] := Gdip_CreateBitmapFromFile(designpath "\Field_blocker_" _colors[A_Index] ".png")
+		bitmaps["Field_paint_" a_index] := Gdip_CreateBitmapFromFile(designpath "\Field_paint_" _colors[A_Index] ".png")
+	}
+	bitmaps["Ball0"] := Gdip_CreateBitmapFromFile(designpath "\Ball_exploded.png")
+	bitmaps["Field_Empty"] := Gdip_CreateBitmapFromFile(designpath "\Field_Empty.bmp")
+	bitmaps["Field_BallDrop_Empty_r"] := Gdip_CreateBitmapFromFile(designpath "\Field_BallDrop_Empty_r.bmp")
+	bitmaps["Field_BallDrop_Empty_l"] := Gdip_CreateBitmapFromFile(designpath "\Field_BallDrop_Empty_l.bmp")
+	bitmaps["Field_BallDrop_Empty_rl"] := Gdip_CreateBitmapFromFile(designpath "\Field_BallDrop_Empty_rl.bmp")
+	bitmaps["Field_Rotator"] := Gdip_CreateBitmapFromFile(designpath "\Field_Rotator.png")
+	bitmaps["Field_Rotator_blown"] := Gdip_CreateBitmapFromFile(designpath "\Field_Rotator_blown.png")
+	loop 8
+	{
+		bitmaps["Field_Rotator_" A_Index*10] := Gdip_CreateBitmapFromFile(designpath "\Field_Rotator_" A_Index*10 ".png")
+		bitmaps["Field_Rotator_blown_" A_Index*10] := Gdip_CreateBitmapFromFile(designpath "\Field_Rotator_blown_" A_Index*10 ".png")
+	}
+	bitmaps["Field_Conn_r"] := Gdip_CreateBitmapFromFile(designpath "\Field_Conn_r.png")
+	bitmaps["Field_Conn_l"] := Gdip_CreateBitmapFromFile(designpath "\Field_Conn_l.png")
+	bitmaps["Field_Conn_u"] := Gdip_CreateBitmapFromFile(designpath "\Field_Conn_u.png")
+	bitmaps["Field_Conn_d"] := Gdip_CreateBitmapFromFile(designpath "\Field_Conn_d.png")
+	bitmaps["Field_Conn_b"] := Gdip_CreateBitmapFromFile(designpath "\Field_Conn_b.png")
+	bitmaps["Field_Conn_h"] := Gdip_CreateBitmapFromFile(designpath "\Field_Conn_h.png")
+	bitmaps["Field_Conn_v"] := Gdip_CreateBitmapFromFile(designpath "\Field_Conn_v.png")
+	bitmaps["Field_Arrow_r"] := Gdip_CreateBitmapFromFile(designpath "\Field_Arrow_r.png")
+	bitmaps["Field_Arrow_l"] := Gdip_CreateBitmapFromFile(designpath "\Field_Arrow_l.png")
+	bitmaps["Field_Arrow_u"] := Gdip_CreateBitmapFromFile(designpath "\Field_Arrow_u.png")
+	bitmaps["Field_Arrow_d"] := Gdip_CreateBitmapFromFile(designpath "\Field_Arrow_d.png")
+	bitmaps["Field_Teleporter_h"] := Gdip_CreateBitmapFromFile(designpath "\Field_Teleporter_h.png")
+	bitmaps["Field_Teleporter_v"] := Gdip_CreateBitmapFromFile(designpath "\Field_Teleporter_v.png")
+	bitmaps["Field_Teleporter_b"] := Gdip_CreateBitmapFromFile(designpath "\Field_Teleporter_b.png")
+	bitmaps["Field_BallDrop_Conn"] := Gdip_CreateBitmapFromFile(designpath "\Field_BallDrop_Conn.png")
+	bitmaps["Field_BallDrop_Conn_u"] := Gdip_CreateBitmapFromFile(designpath "\Field_BallDrop_Conn_u.png")
+	bitmaps["Field_info_Time_display"] := Gdip_CreateBitmapFromFile(designpath "\Field_info_Time_display.png")
+	bitmaps["Field_info_NextBall"] := Gdip_CreateBitmapFromFile(designpath "\Field_info_NextBall.png")
+	bitmaps["Field_info_ballColorChallenge"] := Gdip_CreateBitmapFromFile(designpath "\Field_info_ballColorChallenge.png")
+	bitmaps["Field_info_rotatorColorChallenge"] := Gdip_CreateBitmapFromFile(designpath "\Field_info_rotatorColorChallenge.png")
+	loop 5
+	{
+		bitmaps["Field_info_movableBalls_" A_Index-1] := Gdip_CreateBitmapFromFile(designpath "\Field_info_movableBalls_" A_Index-1 ".png")
+	}
+		
+	loop 9
+		bitmaps["Field_Rotator_explode_" a_index] := Gdip_CreateBitmapFromFile(designpath "\Field_Rotator_explode_" A_Index ".png")
+	
+}
 
 draw()
 {
@@ -131,6 +144,11 @@ draw()
 		g_foreground_obm := SelectObject(g_foreground_hdc, g_foreground_hbm)
 		g_foreground_G := Gdip_GraphicsFromHDC(g_foreground_hdc)
 		Gdip_SetSmoothingMode(g_foreground_G, 4) ;We will also set the smoothing mode of the graphics to 4 (Antialias) to make the shapes we use smooth
+	}
+	
+	if (_share.needInitDesign)
+	{
+		draw_initDesign()
 	}
 	
 	if (_play.state="play")

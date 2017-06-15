@@ -14,6 +14,7 @@ gui_menu_init()
 	IniRead,lastSelectedLevel,settings.ini,menu,lastSelectedLevel, %A_Space%
 	IniRead,backgroundMusic,settings.ini,menu,backgroundMusic, %A_Space%
 	IniRead,SoundPack,settings.ini,menu,SoundPack, %A_Space%
+	IniRead,opticalDesign,settings.ini,menu,opticalDesign, %A_Space%
 	
 	gui,MainMenu:default
 	gui,-dpiscale
@@ -73,6 +74,23 @@ gui_menu_init()
 	guicontrol,choosestring,GUIMainMenuSoundPack,%SoundPack%
 	_sound.SoundPack:=SoundPack
 	
+	gui,add,text, xm Y+10, Design
+	availableopticalDesigns:=""
+	loop, files, pictures\*,D
+	{
+		availableopticalDesigns.="|"A_LoopFileName
+		if not opticalDesign
+		{
+			opticalDesign:=A_LoopFileName
+		}
+	}
+	
+	gui,add,DropDownList, X+10 yp vGUIMainMenuopticalDesign gGUIMainMenuopticalDesign
+	guicontrol,,GUIMainMenuopticalDesign,% availableopticalDesigns
+	guicontrol,choosestring,GUIMainMenuopticalDesign,%opticalDesign%
+	_share.opticalDesign:=opticalDesign
+	_share.needInitDesign:=true
+	
 	gui,show,hide, PABI Logical
 	return
 	
@@ -99,6 +117,15 @@ gui_menu_init()
 	Iniwrite,%GUIMainMenuSoundPack%,settings.ini,menu,SoundPack
 	
 	_sound.SoundPack:=GUIMainMenuSoundPack
+	return
+	
+	GUIMainMenuopticalDesign:
+	gui,MainMenu:default
+	gui,submit,nohide
+	Iniwrite,%GUIMainMenuopticalDesign%,settings.ini,menu,opticalDesign
+	
+	_share.opticalDesign:=GUIMainMenuopticalDesign
+	_share.needInitDesign:=true
 	return
 	
 	GUIMainMenuLevelSet:
