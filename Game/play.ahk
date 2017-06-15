@@ -61,7 +61,7 @@ play()
 	
 	if (_play.state="menu")
 	{
-		_sound.music:=""
+		_sound.backgroundmusicEnable:=false
 		if not (_play.showingwhat = "menu")
 		{
 			_play.showingwhat:="menu"
@@ -73,7 +73,7 @@ play()
 	{
 		if not (_play.showingwhat = "menu")
 		{
-			_sound.music:=""
+			_sound.backgroundmusicEnable:=false
 			_play.showingwhat:="menu"
 			gui_menu_show()
 			gui_play_hide()
@@ -84,7 +84,7 @@ play()
 		if not (_play.showingwhat = "menu")
 		{
 			saveAchievement()
-			_sound.music:=""
+			_sound.backgroundmusicEnable:=false
 			_play.showingwhat:="menu"
 			gui_menu_reloadLevels()
 			gui_menu_show()
@@ -93,7 +93,7 @@ play()
 	}
 	else if (_play.state="start")
 	{
-		_sound.music:=""
+		_sound.backgroundmusicEnable:=false
 		if not (_play.showingwhat = "play")
 		{
 			_play.showingwhat:="play"
@@ -107,7 +107,7 @@ play()
 	{
 		if not (_play.showingwhat = "play")
 		{
-			_sound.music:="Fortadelis_-_Fade.mp3"
+			_sound.backgroundmusicEnable:=true
 			_play.showingwhat:="play"
 			gui_play_show()
 			gui_menu_hide()
@@ -252,7 +252,7 @@ play()
 		}
 		if goalReached
 		{
-			MsgBox gewonnen!
+			_share.menuHint:="You won!"
 			_play.state:="won"
 			return
 		}
@@ -262,7 +262,7 @@ play()
 			_play.timeleft-=1
 			if (_play.timeleft<0)
 			{
-				MsgBox Zeit abgelaufen!
+				_share.menuHint:="Game timeout!"
 				_play.state:="lost"
 				return
 			}
@@ -285,7 +285,7 @@ play()
 			_play.timeForBall-=1
 			if (_play.timeForBall<0)
 			{
-				MsgBox Zeit für den Ball abgelaufen!
+				_share.menuHint:="Ball timeout!"
 				_play.state:="lost"
 				return
 			}

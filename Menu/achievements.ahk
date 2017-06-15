@@ -20,8 +20,9 @@ loadLevelSets()
 			_levels.levelsets[filename].levels[a_loopfield].won:=false ;will be set later
 			_levels.levelsets[filename].levels[a_loopfield].index:=a_index
 			_levels.levelsets[filename].levelsSorted[a_index]:=_levels.levelsets[filename].levels[a_loopfield]
-			
 		}
+		_levels.levelsets[filename].lastUnlockedLevelIndex:=1 ;will be set later if user has alredy solved some levels
+		_levels.levelsets[filename].lastUnlockedLevelID:=_levels.levelsets[filename].levelsSorted[1].id ;will be set later if user has alredy solved some levels
 	}
 	loadAchievements()
 }
@@ -30,9 +31,11 @@ loadLevelSets()
 loadAchievements()
 {
 	iniread, levelsets, achievements.ini
+	
 	loop,parse,levelsets,`n ;each ini section contains information about one levelset
 	{
 		oneLevelSet:=a_loopfield
+		
 		if (_levels.levelsets.haskey(oneLevelSet)) ;catch if the levelset does not exist
 		{
 			iniread, lastWonLevel, achievements.ini,%oneLevelSet%,lastWonLevel

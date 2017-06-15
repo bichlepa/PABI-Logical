@@ -26,6 +26,7 @@ gui_play_init()
 	_share.heightofguipic := heightofguipic
 	return
 	MainGUIGUIClose:
+	_share.menuHint:="Game aborted!"
 	_play.statechangerequest := "menu"
 	return
 	

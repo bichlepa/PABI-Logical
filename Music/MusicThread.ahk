@@ -18,10 +18,13 @@ if _ahkThreadID = sound1 ;this is the music thread
 	settimer, stopmusicIfChanged,100
 	Loop
 	{
-		if (_sound.music !=currentlyPlayingMusic)
+		if (_sound.backgroundmusicEnable !=currentlyPlayingMusic)
 		{
-			currentlyPlayingMusic:=_sound.music
-			playBackgroundMusic(currentlyPlayingMusic)
+			currentlyPlayingMusic:=_sound.backgroundmusicEnable
+			if currentlyPlayingMusic 
+				playBackgroundMusic(_sound.backgroundmusic)
+			else
+				stopBackgroundMusic()
 		}
 	}
 }
@@ -36,8 +39,8 @@ Loop
 return
 
 stopmusicIfChanged:
-if (_sound.music !=currentlyPlayingMusic)
+if (_sound.backgroundmusicEnable !=currentlyPlayingMusic)
 {
-	SoundPlay,aödfihasio
+	stopBackgroundMusic()
 }
 return

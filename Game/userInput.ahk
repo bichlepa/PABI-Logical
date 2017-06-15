@@ -54,5 +54,6 @@ getClickedField(mx,my)
 
 gui_play_esc()
 {
+	_share.menuHint:="Game aborted!"
 	_play.statechangerequest:="lost"
 }

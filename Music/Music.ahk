@@ -16,11 +16,13 @@
 
 playOneSound(soundname)
 {
-	SoundPlay,Sounds\%soundname%.wav,wait
+	SoundPlay,% "Sounds\" _sound.SoundPack "\" soundname ".wav",wait
 }
 
 playBackgroundMusic(soundname)
 {
+	global stopBackgroundMusic
+	stopBackgroundMusic:=false
 	if (soundname = "")
 	{
 		soundplay Sounds\Background Music\nonexistentMusicFileToStopMusic
@@ -29,6 +31,19 @@ playBackgroundMusic(soundname)
 	{
 		soundpath=Sounds\Background Music\%soundname%
 		Loop
+		{
 			soundplay %soundpath%,wait
+			if (stopBackgroundMusic)
+			{
+				stopBackgroundMusic := False
+				break
+			}
+		}
 	}
+}
+stopBackgroundMusic()
+{
+	global
+	stopBackgroundMusic:=true
+	soundplay Sounds\Background Music\nonexistentMusicFileToStopMusic
 }
