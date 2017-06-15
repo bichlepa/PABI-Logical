@@ -52,6 +52,32 @@ class class_fieldPrototype
 		
 	}
 	
+	
+	;Used to find out whether the field can send a ball from a certain direction
+	canSendBallTo(Dir)
+	{
+		if (this["conn_" Dir])
+		{
+			if (Dir = "r")
+			{
+				return (_allFields[this.neighbor_l].canSendBallTo("r"))
+			}
+			else if (Dir = "l")
+			{
+				return (_allFields[this.neighbor_r].canSendBallTo("l"))
+			}
+			else if (Dir = "u")
+			{
+				return (_allFields[this.neighbor_d].canSendBallTo("u"))
+			}
+			else if (Dir = "d")
+			{
+				return (_allFields[this.neighbor_u].canSendBallTo("d"))
+			}
+		}
+	}
+	
+	
 	;Used to find out whether the field can receive a ball from a certain direction
 	canReceiveBallFrom(Dir)
 	{
@@ -168,6 +194,12 @@ class class_ballDrop extends class_fieldPrototype
 		}
 		
 	}
+	
+	;Used to find out whether the field can send a ball from a certain direction
+	canSendBallTo(Dir)
+	{
+		return this["conn_" Dir]
+	}
 }
 
 class class_empty extends class_fieldPrototype
@@ -203,7 +235,6 @@ class class_rotator extends class_fieldPrototype
 		
 		;other settings
 		this.rotatingStepWidth:=20
-		this.explodingStepCount:=9
 		
 		this.init()
 	}
@@ -355,12 +386,12 @@ class class_rotator extends class_fieldPrototype
 		{
 			;next step
 			this.explodingStep+=1
-			if (this.explodingStep>this.explodingStepCount) ;if explosion has finished
+			if (this.explodingStep>_share.opticalDesignPrefs.AnimationExplodeSteps) ;if explosion has finished
 			{
 				this.explodingStep:=0
 				this.exploding:=false
 			}
-			if (this.explodingStep=5) ;in the middle of explosion
+			if (this.explodingStep=_share.opticalDesignPrefs.AnimationExplodeRemoveBallsStep) ;in the middle of explosion
 			{
 				;redraw the rotator (it becomes darker)
 				this.exploded:=true
@@ -584,6 +615,11 @@ class class_rotator extends class_fieldPrototype
 		return true
 	}
 	
+	canSendBallTo(Dir)
+	{
+		return this["conn_" Dir]
+	}
+	
 	;adds a ball to the rotator
 	addball(ball, dir)
 	{
@@ -716,17 +752,12 @@ class class_pass extends class_fieldPrototype
 	{
 		this.type:=type
 		
-		background:=criticalObject()
-		this.pictures:=criticalObject()
-		this.pictures.background:=background
-		
 		if (substr(this.type,2,1)="v")  ;vertical
 		{
 			this.conn_r:=false
 			this.conn_l:=false
 			this.conn_u:=true
 			this.conn_d:=true
-			background.push("Field_empty", "Field_Conn_v")
 		}
 		else if (substr(this.type,2,1)="h") ;horizontal
 		{
@@ -734,7 +765,6 @@ class class_pass extends class_fieldPrototype
 			this.conn_l:=true
 			this.conn_u:=false
 			this.conn_d:=false
-			background.push("Field_empty", "Field_Conn_h")
 		}
 		else if (substr(this.type,2,1)="b")  ;both
 		{
@@ -742,18 +772,46 @@ class class_pass extends class_fieldPrototype
 			this.conn_l:=true
 			this.conn_u:=true
 			this.conn_d:=true
-			background.push("Field_empty", "Field_Conn_b")
 		}
 		else
 		{
 			d(this, "ERROR. Cannot detect the directions of the connection")
 		}
+		
 	}
-	
+	init()
+	{
+		background:=criticalObject()
+		this.pictures:=criticalObject()
+		this.pictures.background:=background
+		
+		if (substr(this.type,2,1)="v")  ;vertical
+		{
+			background.push("Field_empty", "Field_Conn_ud")
+		}
+		else if (substr(this.type,2,1)="h") ;horizontal
+		{
+			background.push("Field_empty", "Field_Conn_rl")
+		}
+		else if (substr(this.type,2,1)="b")  ;both
+		{
+			dirs:=""
+			if (_allFields[this.neighbor_r].canReceiveBallTo("r") and (_allFields[this.neighbor_r].canSendBallTo("l") or this.canSendBallTo("r")))
+				dirs.="r"
+			if (_allFields[this.neighbor_l].canReceiveBallTo("l") and (_allFields[this.neighbor_l].canSendBallTo("r") or this.canSendBallTo("l")))
+				dirs.="l"
+			if (_allFields[this.neighbor_d].canReceiveBallTo("d") and (_allFields[this.neighbor_d].canSendBallTo("u") or this.canSendBallTo("d")))
+				dirs.="d"
+			if (_allFields[this.neighbor_u].canReceiveBallTo("u") and (_allFields[this.neighbor_u].canSendBallTo("d") or this.canSendBallTo("u")))
+				dirs.="u"
+			if dirs
+				background.push("Field_empty", "Field_Conn_" dirs)
+		}
+	}
 	
 	canReceiveBallFromBalldrop()
 	{
-		if (substr(this.type,2,1)="v" or substr(this.type,2,1)="b")
+		if (this.ColY = 1 and (substr(this.type,2,1)="v" or substr(this.type,2,1)="b"))
 		{
 			if (_play.state!="play" or ((_play.movingBalls + 1) < _field.maxMovingBalls))
 				return true
@@ -762,11 +820,34 @@ class class_pass extends class_fieldPrototype
 			return false
 	}
 	
+	canSendBallTo(Dir)
+	{
+		if (this["conn_" Dir])
+		{
+			if (Dir = "r")
+			{
+				return (_allFields[this.neighbor_l].canSendBallTo("r"))
+			}
+			else if (Dir = "l")
+			{
+				return (_allFields[this.neighbor_r].canSendBallTo("l"))
+			}
+			else if (Dir = "u")
+			{
+				return (_allFields[this.neighbor_d].canSendBallTo("u"))
+			}
+			else if (Dir = "d")
+			{
+				return (_allFields[this.neighbor_u].canSendBallTo("d") or this.canReceiveBallFromBalldrop())
+			}
+		}
+	}
 	
 	receiveFromBalldrop(ball)
 	{
 		this.addball(ball,"u")
 		
+		_sound.toplay.push("dock")
 		ball.x:=this.mx
 		ball.y:=this.y+1
 		ball.dir:="d"
@@ -818,28 +899,30 @@ class class_teleporter extends class_fieldPrototype
 		
 		background.push("Field_empty")
 		
+		conn:=""
 		if (substr(this.type,2,1)="h" or (substr(this.type,2,1)="b"))
 		{
-			if (_allFields[this.neighbor_r].canReceiveBallTo("r"))
+			if (_allFields[this.neighbor_r].canReceiveBallTo("r") and this.canSendBallTo("r") or _allFields[this.neighbor_r].canSendBallTo("l"))
 			{
-				background.push( "Field_Conn_r")
+				conn.="r"
 			}
-			if (_allFields[this.neighbor_l].canReceiveBallTo("l"))
+			if (_allFields[this.neighbor_l].canReceiveBallTo("l") and this.canSendBallTo("l") or _allFields[this.neighbor_l].canSendBallTo("r"))
 			{
-				background.push( "Field_Conn_l")
+				conn.="l"
 			}
 		}
 		if (substr(this.type,2,1)="v" or (substr(this.type,2,1)="b"))
 		{
-			if (_allFields[this.neighbor_u].canReceiveBallTo("u"))
+			if (_allFields[this.neighbor_u].canReceiveBallTo("u") and this.canSendBallTo("u") or _allFields[this.neighbor_u].canSendBallTo("d"))
 			{
-				background.push( "Field_Conn_u")
+				conn.="u"
 			}
-			if (_allFields[this.neighbor_d].canReceiveBallTo("d"))
+			if (_allFields[this.neighbor_d].canReceiveBallTo("d") and this.canSendBallTo("d") or _allFields[this.neighbor_d].canSendBallTo("u"))
 			{
-				background.push( "Field_Conn_d")
+				conn.="d"
 			}
 		}
+		background.push( "Field_Conn_" conn)
 	}
 	
 	actionInTheMiddle(ball)
@@ -885,6 +968,45 @@ class class_teleporter extends class_fieldPrototype
 			
 		}
 	}
+	
+	canSendBallTo(Dir)
+	{
+		
+		for onefieldIndex, onefield in _allFields
+		{
+			if (Dir = "r" and this.conn_r)
+			{
+				if (onefield!=this and (substr(onefield.type,1,2)="th" or substr(onefield.type,1,2)="tb") and _allFields[onefield.neighbor_l].canSendBallTo("r"))
+				{
+					return true
+				}
+			}
+			else if (Dir = "l" and this.conn_l)
+			{
+				if (onefield!=this and (substr(onefield.type,1,2)="th" or substr(onefield.type,1,2)="tb") and _allFields[onefield.neighbor_r].canSendBallTo("l"))
+				{
+					return true
+				}
+			}
+			else if (Dir = "d" and this.conn_d)
+			{
+				if (onefield!=this and (substr(onefield.type,1,2)="tv" or substr(onefield.type,1,2)="tb") and _allFields[onefield.neighbor_u].canSendBallTo("d"))
+				{
+					return true
+				}
+			}
+			else if (Dir = "u" and this.conn_u)
+			{
+				if (onefield!=this and (substr(onefield.type,1,2)="tv" or substr(onefield.type,1,2)="tb") and _allFields[onefield.neighbor_d].canSendBallTo("u"))
+				{
+					return true
+				}
+			}
+			
+		}
+		return false
+	}
+	
 }
 
 class class_blocker extends class_fieldPrototype
@@ -894,6 +1016,33 @@ class class_blocker extends class_fieldPrototype
 		this.type:=type
 		this.color:=substr(A_LoopField,3)
 		
+		
+		if (substr(this.type,2,1)="v")  ;vertical
+		{
+			this.conn_r:=false
+			this.conn_l:=false
+			this.conn_u:=true
+			this.conn_d:=true
+		}
+		else if (substr(this.type,2,1)="h") ;horizontal
+		{
+			this.conn_r:=true
+			this.conn_l:=true
+			this.conn_u:=false
+			this.conn_d:=false
+		}
+		else if (substr(this.type,2,1)="b")  ;both
+		{
+			this.conn_r:=true
+			this.conn_l:=true
+			this.conn_u:=true
+			this.conn_d:=true
+		}
+	}
+	
+	
+	init()
+	{
 		background:=criticalObject()
 		foreground:=criticalObject()
 		this.pictures:=criticalObject()
@@ -905,28 +1054,28 @@ class class_blocker extends class_fieldPrototype
 		
 		if (substr(this.type,2,1)="v")  ;vertical
 		{
-			this.conn_r:=false
-			this.conn_l:=false
-			this.conn_u:=true
 			this.conn_d:=true
-			background.push("Field_Conn_v")
+			background.push("Field_Conn_ud")
 		}
 		else if (substr(this.type,2,1)="h") ;horizontal
 		{
-			this.conn_r:=true
-			this.conn_l:=true
-			this.conn_u:=false
-			this.conn_d:=false
-			background.push("Field_Conn_h")
+			background.push("Field_Conn_rl")
 		}
 		else if (substr(this.type,2,1)="b")  ;both
 		{
-			this.conn_r:=true
-			this.conn_l:=true
-			this.conn_u:=true
-			this.conn_d:=true
-			background.push("Field_Conn_b")
+			dirs:=""
+			if (_allFields[this.neighbor_r].canReceiveBallTo("r") and (_allFields[this.neighbor_r].canSendBallTo("l")) or this.canSendBallTo("r"))
+				dirs.="r"
+			if (_allFields[this.neighbor_l].canReceiveBallTo("l") and (_allFields[this.neighbor_l].canSendBallTo("r")) or this.canSendBallTo("l"))
+				dirs.="l"
+			if (_allFields[this.neighbor_d].canReceiveBallTo("d") and (_allFields[this.neighbor_d].canSendBallTo("u")) or this.canSendBallTo("d"))
+				dirs.="d"
+			if (_allFields[this.neighbor_u].canReceiveBallTo("u") and (_allFields[this.neighbor_u].canSendBallTo("d")) or this.canSendBallTo("u"))
+				dirs.="u"
+			if dirs
+				background.push("Field_empty", "Field_Conn_" dirs)
 		}
+		
 	}
 	
 	actionInTheMiddle(ball)
@@ -985,7 +1134,7 @@ class class_paint extends class_fieldPrototype
 			this.conn_l:=false
 			this.conn_u:=true
 			this.conn_d:=true
-			background.push("Field_Conn_v")
+			background.push("Field_Conn_ud")
 		}
 		else if (substr(this.type,2,1)="h") ;horizontal
 		{
@@ -993,7 +1142,7 @@ class class_paint extends class_fieldPrototype
 			this.conn_l:=true
 			this.conn_u:=false
 			this.conn_d:=false
-			background.push("Field_Conn_h")
+			background.push("Field_Conn_rl")
 		}
 		else if (substr(this.type,2,1)="b")  ;both
 		{
@@ -1001,7 +1150,7 @@ class class_paint extends class_fieldPrototype
 			this.conn_l:=true
 			this.conn_u:=true
 			this.conn_d:=true
-			background.push("Field_Conn_b")
+			background.push("Field_Conn_rlud")
 		}
 	}
 	
@@ -1039,14 +1188,19 @@ class class_arrow extends class_fieldPrototype
 		background.push("Field_empty")
 		
 		;add connections
-		if (_allFields[this.neighbor_r].canReceiveBallTo("r"))
-			background.push("Field_Conn_r")
-		if (_allFields[this.neighbor_l].canReceiveBallTo("l"))
-			background.push("Field_Conn_l")
-		if (_allFields[this.neighbor_u].canReceiveBallTo("u"))
-			background.push("Field_Conn_u")
-		if (_allFields[this.neighbor_d].canReceiveBallTo("d"))
-			background.push("Field_Conn_d")
+		dirs:=""
+		if (_allFields[this.neighbor_r].canReceiveBallTo("r") and (_allFields[this.neighbor_r].canSendBallTo("l") or this.canSendBallTo("r")))
+			dirs.="r"
+		if (_allFields[this.neighbor_l].canReceiveBallTo("l") and (_allFields[this.neighbor_l].canSendBallTo("r") or this.canSendBallTo("l")))
+			dirs.="l"
+		if (_allFields[this.neighbor_u].canReceiveBallTo("u") and (_allFields[this.neighbor_u].canSendBallTo("d") or this.canSendBallTo("u")))
+			dirs.="u"
+		if (_allFields[this.neighbor_d].canReceiveBallTo("d") and (_allFields[this.neighbor_d].canSendBallTo("u") or this.canSendBallTo("d")))
+			dirs.="d"
+		if not instr(dirs,this.dir)
+			dirs.=this.dir
+		if dirs
+			background.push("Field_Conn_" dirs)
 		foreground.push("Field_Arrow_" substr(this.type,2,1))
 	}
 	
@@ -1079,6 +1233,12 @@ class class_arrow extends class_fieldPrototype
 				ball.y:=this.y + this.h/2 
 			}
 		}
+	}
+	
+	;Used to find out whether the field can send a ball from a certain direction
+	canSendBallTo(Dir)
+	{
+		return (this.dir = Dir)
 	}
 }
 

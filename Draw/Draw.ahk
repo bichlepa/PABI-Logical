@@ -25,7 +25,7 @@
 	brushs["balldropWarn4"] := Gdip_BrushCreateSolid("0x55ffaaea") ;
 
 	
-
+	_share.opticalDesignPrefs:=criticalObject()
 	_share.MainGuiDC := GetDC(_share.MainGuiHWND)
 	
 }
@@ -36,14 +36,31 @@ draw_initDesign()
 	local onename, onebitmap, designpath
 	_share.needInitDesign:=false
 	
+	designpath:= A_ScriptDir "\Pictures\" _share.opticalDesign 
+	
+	allkeys:=Object()
+	for onekey, onevalue in _share.opticalDesignPrefs
+	{
+		allkeys.push(onekey)
+	}
+	for onekey in allkeys
+	{
+		_share.opticalDesignPrefs.delete(onekey)
+	}
+	
+	
+	IniRead,temp,%designpath%\design.ini,animations,AnimationExplodeSteps
+	_share.opticalDesignPrefs.AnimationExplodeSteps:=temp
+	IniRead,temp,%designpath%\design.ini,animations,AnimationExplodeRemoveBallsStep
+	_share.opticalDesignPrefs.AnimationExplodeRemoveBallsStep:=temp
+	
 	for onename, onebitmap in bitmaps
 	{
 		Gdip_DisposeImage(onebitmap)
 	}
 	
 	;colors: 1:red, 2:yellow, 3:green, 4:blue
-	bitmaps:=Object()
-	designpath:= A_ScriptDir "\Pictures\" _share.opticalDesign  
+	bitmaps:=Object() 
 	loop 4
 	{
 		bitmaps["Ball" a_index] := Gdip_CreateBitmapFromFile(designpath "\Ball_" _colors[A_Index] ".png")
@@ -66,9 +83,58 @@ draw_initDesign()
 	bitmaps["Field_Conn_l"] := Gdip_CreateBitmapFromFile(designpath "\Field_Conn_l.png")
 	bitmaps["Field_Conn_u"] := Gdip_CreateBitmapFromFile(designpath "\Field_Conn_u.png")
 	bitmaps["Field_Conn_d"] := Gdip_CreateBitmapFromFile(designpath "\Field_Conn_d.png")
-	bitmaps["Field_Conn_b"] := Gdip_CreateBitmapFromFile(designpath "\Field_Conn_b.png")
-	bitmaps["Field_Conn_h"] := Gdip_CreateBitmapFromFile(designpath "\Field_Conn_h.png")
-	bitmaps["Field_Conn_v"] := Gdip_CreateBitmapFromFile(designpath "\Field_Conn_v.png")
+	bitmaps["Field_Conn_rl"] := Gdip_CreateBitmapFromFile(designpath "\Field_Conn_rl.png")
+	bitmaps["Field_Conn_lr"] := bitmaps["Field_Conn_rl"]
+	bitmaps["Field_Conn_ud"] := Gdip_CreateBitmapFromFile(designpath "\Field_Conn_ud.png")
+	bitmaps["Field_Conn_du"] := bitmaps["Field_Conn_ud"]
+	bitmaps["Field_Conn_ld"] := Gdip_CreateBitmapFromFile(designpath "\Field_Conn_ld.png")
+	bitmaps["Field_Conn_dl"] := bitmaps["Field_Conn_ld"]
+	bitmaps["Field_Conn_lu"] := Gdip_CreateBitmapFromFile(designpath "\Field_Conn_lu.png")
+	bitmaps["Field_Conn_ul"] := bitmaps["Field_Conn_lu"]
+	bitmaps["Field_Conn_rd"] := Gdip_CreateBitmapFromFile(designpath "\Field_Conn_rd.png")
+	bitmaps["Field_Conn_dr"] := bitmaps["Field_Conn_rd"]
+	bitmaps["Field_Conn_ru"] := Gdip_CreateBitmapFromFile(designpath "\Field_Conn_ru.png")
+	bitmaps["Field_Conn_ur"] := bitmaps["Field_Conn_ru"]
+	bitmaps["Field_Conn_rlu"] := Gdip_CreateBitmapFromFile(designpath "\Field_Conn_rlu.png")
+	bitmaps["Field_Conn_rul"] := bitmaps["Field_Conn_rlu"]
+	bitmaps["Field_Conn_lru"] := bitmaps["Field_Conn_rlu"]
+	bitmaps["Field_Conn_lur"] := bitmaps["Field_Conn_rlu"]
+	bitmaps["Field_Conn_url"] := bitmaps["Field_Conn_rlu"]
+	bitmaps["Field_Conn_ulr"] := bitmaps["Field_Conn_rlu"]
+	bitmaps["Field_Conn_rld"] := Gdip_CreateBitmapFromFile(designpath "\Field_Conn_rld.png")
+	bitmaps["Field_Conn_rdl"] := bitmaps["Field_Conn_rld"]
+	bitmaps["Field_Conn_lrd"] := bitmaps["Field_Conn_rld"]
+	bitmaps["Field_Conn_ldr"] := bitmaps["Field_Conn_rld"]
+	bitmaps["Field_Conn_drl"] := bitmaps["Field_Conn_rld"]
+	bitmaps["Field_Conn_dlr"] := bitmaps["Field_Conn_rld"]
+	bitmaps["Field_Conn_rdu"] := Gdip_CreateBitmapFromFile(designpath "\Field_Conn_rud.png")
+	bitmaps["Field_Conn_rud"] := bitmaps["Field_Conn_rdu"]
+	bitmaps["Field_Conn_urd"] := bitmaps["Field_Conn_rdu"]
+	bitmaps["Field_Conn_udr"] := bitmaps["Field_Conn_rdu"]
+	bitmaps["Field_Conn_dru"] := bitmaps["Field_Conn_rdu"]
+	bitmaps["Field_Conn_dur"] := bitmaps["Field_Conn_rdu"]
+	bitmaps["Field_Conn_ldu"] := Gdip_CreateBitmapFromFile(designpath "\Field_Conn_lud.png")
+	bitmaps["Field_Conn_lud"] := bitmaps["Field_Conn_ldu"]
+	bitmaps["Field_Conn_uld"] := bitmaps["Field_Conn_ldu"]
+	bitmaps["Field_Conn_udl"] := bitmaps["Field_Conn_ldu"]
+	bitmaps["Field_Conn_dlu"] := bitmaps["Field_Conn_ldu"]
+	bitmaps["Field_Conn_dul"] := bitmaps["Field_Conn_ldu"]
+	bitmaps["Field_Conn_rlud"] := Gdip_CreateBitmapFromFile(designpath "\Field_Conn_rlud.png")
+	bitmaps["Field_Conn_rldu"] := bitmaps["Field_Conn_rlud"]
+	bitmaps["Field_Conn_lrud"] := bitmaps["Field_Conn_rlud"]
+	bitmaps["Field_Conn_lrdu"] := bitmaps["Field_Conn_rlud"]
+	bitmaps["Field_Conn_udrl"] := bitmaps["Field_Conn_rlud"]
+	bitmaps["Field_Conn_udlr"] := bitmaps["Field_Conn_rlud"]
+	bitmaps["Field_Conn_durl"] := bitmaps["Field_Conn_rlud"]
+	bitmaps["Field_Conn_dulr"] := bitmaps["Field_Conn_rlud"]
+	bitmaps["Field_Conn_uldr"] := bitmaps["Field_Conn_rlud"]
+	bitmaps["Field_Conn_ulrd"] := bitmaps["Field_Conn_rlud"]
+	bitmaps["Field_Conn_ludr"] := bitmaps["Field_Conn_rlud"]
+	bitmaps["Field_Conn_lurd"] := bitmaps["Field_Conn_rlud"]
+	bitmaps["Field_Conn_rdlu"] := bitmaps["Field_Conn_rlud"]
+	bitmaps["Field_Conn_rdul"] := bitmaps["Field_Conn_rlud"]
+	bitmaps["Field_Conn_drlu"] := bitmaps["Field_Conn_rlud"]
+	bitmaps["Field_Conn_drul"] := bitmaps["Field_Conn_rlud"]
 	bitmaps["Field_Arrow_r"] := Gdip_CreateBitmapFromFile(designpath "\Field_Arrow_r.png")
 	bitmaps["Field_Arrow_l"] := Gdip_CreateBitmapFromFile(designpath "\Field_Arrow_l.png")
 	bitmaps["Field_Arrow_u"] := Gdip_CreateBitmapFromFile(designpath "\Field_Arrow_u.png")
