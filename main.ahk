@@ -55,13 +55,13 @@ loop 10
 playInit()
 
 _share.IterationTimer:=20
+_share.IterationIndex:=0
 longSleepAdder:=10
 
 ;~ Loop
 	;~ playtimer()
 
 startticks:=A_TickCount
-iterationindex:=0
 iterationindex2:=0
 ControlafterTicks:=10
 
@@ -119,7 +119,7 @@ playtimer()
 		iterationindex2:=0
 		startticks:=A_TickCount
 	}
-	iterationindex++
+	_share.IterationIndex++
 	iterationindex2++
 	play()
 }

@@ -166,6 +166,7 @@ draw()
 	global hbm, hdc, obm, G
 	static oldGUI_W
 	static oldGUI_H
+	static oldIterationTimer
 	
 	Font:="Arial"
 	TextOptions:=" s" 30 " Center vCenter cffffffff  Bold"
@@ -219,6 +220,13 @@ draw()
 	
 	if (_play.state!="menu")
 	{
+		;if nothing has changed after last drawing, wait until next iteration
+		while (_share.IterationIndex == oldIterationTimer)
+		{
+			temp=
+		}
+		oldIterationTimer:=_share.IterationIndex
+		
 		;some calculation
 		widthOfField:=_Field.w
 		heightOfField:=_field.h

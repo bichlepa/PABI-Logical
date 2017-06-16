@@ -25,6 +25,7 @@ if _ahkThreadID = sound1 ;this is the music thread
 			else
 				stopBackgroundMusic()
 		}
+		sleep 10
 	}
 }
 

@@ -55,7 +55,7 @@ gui_menu_init()
 	}
 	
 	gui,add,DropDownList, x150 yp w150 vGUIMainMenuBackgroundMusic gGUIMainMenuBackgroundMusic
-	guicontrol,,GUIMainMenuBackgroundMusic,% availableMusic
+	guicontrol,,GUIMainMenuBackgroundMusic,% "|off" availableMusic
 	guicontrol,choosestring,GUIMainMenuBackgroundMusic,%backgroundMusic%
 	_sound.backgroundmusic:=backgroundMusic
 	
@@ -74,7 +74,7 @@ gui_menu_init()
 	}
 	
 	gui,add,DropDownList, x150 yp w150 vGUIMainMenuSoundPack gGUIMainMenuSoundPack
-	guicontrol,,GUIMainMenuSoundPack,% availableSoundPacks
+	guicontrol,,GUIMainMenuSoundPack,% "|off" availableSoundPacks
 	guicontrol,choosestring,GUIMainMenuSoundPack,%SoundPack%
 	_sound.SoundPack:=SoundPack
 	
