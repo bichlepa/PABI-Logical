@@ -123,6 +123,7 @@ play()
 		_play.timeforEndAnimations++
 		if (_play.timeforEndAnimations > 2000/_share.IterationTimer)
 		{
+			saveAchievement()
 			gui_menu_reloadLevels()
 			_play.state:="menu"
 		}
