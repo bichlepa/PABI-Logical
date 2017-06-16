@@ -4,6 +4,8 @@ SendMode Input  ; Recommended for new scripts due to its superior speed and reli
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 SetBatchLines, -1
 
+menu,tray,icon,pictures\icon.ico
+
 CoordMode,mouse,client
 OnExit,exit
 
@@ -34,7 +36,12 @@ _sound.toplay:=CriticalObject()
 _colors.push("red","green","blue", "yellow")
 global_AllThreads := CriticalObject()
 
+if 1=cheat
+{
+	_share.cheatsActive:=true
+}
 
+FileCreateDir,%a_appdata%\PABI Logical
 
 loadLevelSets()
 gui_menu_init()
@@ -69,10 +76,12 @@ playtimer()
 {
 	global
 	
-	
-	while (GetKeyState("f12"))
+	if (_share.cheatsActive)
 	{
-		play()
+		while (GetKeyState("f12"))
+		{
+			play()
+		}
 	}
 	if (filluntillongsleep > _share.IterationTimer)
 	{

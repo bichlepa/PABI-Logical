@@ -30,7 +30,7 @@ loadLevelSets()
 ;Load the achievements file, which records which level is unlocked
 loadAchievements()
 {
-	iniread, levelsets, achievements.ini
+	iniread, levelsets, %a_appdata%\PABI Logical\achievements.ini
 	
 	loop,parse,levelsets,`n ;each ini section contains information about one levelset
 	{
@@ -38,7 +38,7 @@ loadAchievements()
 		
 		if (_levels.levelsets.haskey(oneLevelSet)) ;catch if the levelset does not exist
 		{
-			iniread, lastWonLevel, achievements.ini,%oneLevelSet%,lastWonLevel
+			iniread, lastWonLevel, %a_appdata%\PABI Logical\achievements.ini,%oneLevelSet%,lastWonLevel
 			if (_levels.levelsets[oneLevelSet].levels.haskey(lastWonLevel))  ;catch if the level does not exist in the levelset
 			{
 				for onelevelindex, onelevel in _levels.levelsets[oneLevelSet].levelsSorted
@@ -69,7 +69,7 @@ saveAchievement()
 		{
 			if (_levels.levelsets[_field.levelset].levels[_field.levelid].won !=true) ;only if user wins that level the first time
 			{
-				iniwrite,% _field.levelid,achievements.ini,% _field.levelset,lastWonLevel
+				iniwrite,% _field.levelid,%a_appdata%\PABI Logical\achievements.ini,% _field.levelset,lastWonLevel
 				_levels.levelsets[_field.levelset].levels[_field.levelid].won :=true
 				
 				;Find out which level is the last unlocked

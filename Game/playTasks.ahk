@@ -78,7 +78,7 @@ colorNumber2Name(number)
 		return "red"
 }
 
-
+;just for developing
 cheat()
 {
 	if (getkeystate("numpad1"))

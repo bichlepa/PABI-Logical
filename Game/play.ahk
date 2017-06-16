@@ -113,7 +113,8 @@ play()
 			gui_menu_hide()
 		}
 		
-		cheat() ;just for developing
+		if (_share.cheatsActive)
+			cheat() ;just for developing
 		
 		;~ EnterCriticalSection(_field_section)
 		

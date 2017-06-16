@@ -8,7 +8,6 @@ SetBatchLines, -1
 
 #include music\music.ahk
 #include lib\Object to file\String-object-file.ahk
-#include lib\ObjFullyClone\ObjFullyClone.ahk
 #include debug\debug.ahk
 ;~ d(_field, "ihöi")
 

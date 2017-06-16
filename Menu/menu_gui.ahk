@@ -10,11 +10,11 @@ gui_menu_init()
 		GUIMainMenuLevelSet.="|" onelevelsetID
 	}
 	
-	IniRead,lastSelectedLevelSet,settings.ini,menu,lastSelectedLevelSet, %A_Space%
-	IniRead,lastSelectedLevel,settings.ini,menu,lastSelectedLevel, %A_Space%
-	IniRead,backgroundMusic,settings.ini,menu,backgroundMusic, %A_Space%
-	IniRead,SoundPack,settings.ini,menu,SoundPack, %A_Space%
-	IniRead,opticalDesign,settings.ini,menu,opticalDesign, %A_Space%
+	IniRead,lastSelectedLevelSet,%a_appdata%\PABI Logical\settings.ini,menu,lastSelectedLevelSet, %A_Space%
+	IniRead,lastSelectedLevel,%a_appdata%\PABI Logical\settings.ini,menu,lastSelectedLevel, %A_Space%
+	IniRead,backgroundMusic,%a_appdata%\PABI Logical\settings.ini,menu,backgroundMusic, %A_Space%
+	IniRead,SoundPack,%a_appdata%\PABI Logical\settings.ini,menu,SoundPack, %A_Space%
+	IniRead,opticalDesign,%a_appdata%\PABI Logical\settings.ini,menu,opticalDesign, %A_Space%
 	
 	gui,MainMenu:default
 	gui,-dpiscale
@@ -106,7 +106,7 @@ gui_menu_init()
 	GUIMainMenuBackgroundMusic:
 	gui,MainMenu:default
 	gui,submit,nohide
-	Iniwrite,%GUIMainMenuBackgroundMusic%,settings.ini,menu,backgroundMusic
+	Iniwrite,%GUIMainMenuBackgroundMusic%,%a_appdata%\PABI Logical\settings.ini,menu,backgroundMusic
 	
 	_sound.backgroundmusic:=GUIMainMenuBackgroundMusic
 	return
@@ -114,7 +114,7 @@ gui_menu_init()
 	GUIMainMenuSoundPack:
 	gui,MainMenu:default
 	gui,submit,nohide
-	Iniwrite,%GUIMainMenuSoundPack%,settings.ini,menu,SoundPack
+	Iniwrite,%GUIMainMenuSoundPack%,%a_appdata%\PABI Logical\settings.ini,menu,SoundPack
 	
 	_sound.SoundPack:=GUIMainMenuSoundPack
 	return
@@ -122,7 +122,7 @@ gui_menu_init()
 	GUIMainMenuopticalDesign:
 	gui,MainMenu:default
 	gui,submit,nohide
-	Iniwrite,%GUIMainMenuopticalDesign%,settings.ini,menu,opticalDesign
+	Iniwrite,%GUIMainMenuopticalDesign%,%a_appdata%\PABI Logical\settings.ini,menu,opticalDesign
 	
 	_share.opticalDesign:=GUIMainMenuopticalDesign
 	_share.needInitDesign:=true
@@ -155,8 +155,8 @@ gui_menu_start()
 	}
 	
 	
-	IniWrite,%GUIMainMenuLevelSet%,settings.ini,menu,lastSelectedLevelSet
-	IniWrite,%GUIMainMenuLevel%,settings.ini,menu,lastSelectedLevel
+	IniWrite,%GUIMainMenuLevelSet%,%a_appdata%\PABI Logical\settings.ini,menu,lastSelectedLevelSet
+	IniWrite,%GUIMainMenuLevel%,%a_appdata%\PABI Logical\settings.ini,menu,lastSelectedLevel
 	
 	if (loadField(GUIMainMenuLevelSet, GUIMainMenuLevel) != -1)
 		_play.state:="start"
