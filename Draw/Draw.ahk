@@ -217,7 +217,7 @@ draw()
 		draw_initDesign()
 	}
 	
-	if (_play.state="play")
+	if (_play.state!="menu")
 	{
 		;some calculation
 		widthOfField:=_Field.w

@@ -78,6 +78,12 @@ colorNumber2Name(number)
 		return "red"
 }
 
+playsound(soundfile)
+{
+	_sound.toplay.push({file: soundfile, time: A_TickCount})
+	
+}
+
 ;just for developing
 cheat()
 {

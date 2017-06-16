@@ -14,7 +14,7 @@
 
 leftmousebuttonclick(wParam, lParam, msg, hwnd)
 {
-	if (hwnd != _share.MainGuiHWND)
+	if (hwnd !=  )
 		return
 	MouseGetPos,mx,my ;Get the mouse position
 	factor:=_field.factor

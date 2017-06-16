@@ -6,7 +6,8 @@
 		singlesound:=_sound.toplay[1]
 		_sound.toplay.removeat(1)
 		leavecriticalsection(_sound_section)
-		playOneSound(singlesound)
+		if (A_TickCount - singlesound.time <100)
+			playOneSound(singlesound.file)
 	}
 	else
 	{

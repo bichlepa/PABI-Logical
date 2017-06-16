@@ -20,6 +20,18 @@
 		_balls.delete(onekey)
 	}
 	
+	allkeys:=Object()
+	for onekey, onevalue in _userinput
+	{
+		allkeys.push(onekey)
+	}
+	for oneindex, onekey in allkeys
+	{
+		_userinput.delete(onekey)
+	}
+	
+	
+	
 	for onefieldindex, onefield in _allFields
 	{
 		onefield.init()
@@ -46,6 +58,7 @@
 	_play.movingBalls:=0
 	_play.showingwhat:=""
 	_play.statechangerequest:=""
+	_play.timeforEndAnimations:=0
 	if (not play.state)
 		_play.state:="menu"
 	
@@ -71,24 +84,47 @@ play()
 	}
 	else if (_play.state="lost")
 	{
-		if not (_play.showingwhat = "menu")
+		if (_play.timeforEndAnimations = 0)
 		{
 			_sound.backgroundmusicEnable:=false
-			_play.showingwhat:="menu"
-			gui_menu_show()
-			gui_play_hide()
+			for onefieldIndex, onefield in _allFields
+			{
+				onefield.looseanimation_init()
+			}
+		}
+		
+		;do actions which have to be done always 
+		for onefieldIndex, onefield in _allFields
+		{
+			onefield.looseanimation()
+		}
+		_play.timeforEndAnimations++
+		if (_play.timeforEndAnimations > 1000/_share.IterationTimer)
+		{
+			_play.state:="menu"
 		}
 	}
 	else if (_play.state="won")
 	{
-		if not (_play.showingwhat = "menu")
+		if (_play.timeforEndAnimations = 0)
 		{
-			saveAchievement()
 			_sound.backgroundmusicEnable:=false
-			_play.showingwhat:="menu"
+			for onefieldIndex, onefield in _allFields
+			{
+				onefield.winanimation_init()
+			}
+		}
+		
+		;do actions which have to be done always 
+		for onefieldIndex, onefield in _allFields
+		{
+			onefield.winanimation()
+		}
+		_play.timeforEndAnimations++
+		if (_play.timeforEndAnimations > 2000/_share.IterationTimer)
+		{
 			gui_menu_reloadLevels()
-			gui_menu_show()
-			gui_play_hide()
+			_play.state:="menu"
 		}
 	}
 	else if (_play.state="start")
@@ -122,7 +158,7 @@ play()
 		if (_userinput.HasKey(1))
 		{
 			_userinput[1].Field.actionOnClick(_userinput[1].button, _userinput[1].x,_userinput[1].y)
-			_userinput.delete(1)
+			_userinput.removeat(1)
 		}
 		
 		;move balls

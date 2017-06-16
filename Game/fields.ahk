@@ -369,7 +369,7 @@ class class_rotator extends class_fieldPrototype
 				;If user has clicked while it was rotating, rotate again
 				if (this.rotatingDirNext)
 				{
-					_sound.toplay.push("rotate")
+					playsound("rotate")
 					this.rotatingDir:=this.rotatingDirNext
 					this.rotatingDirNext:=""
 					this.rotating:=True
@@ -428,7 +428,7 @@ class class_rotator extends class_fieldPrototype
 				}
 				else
 				{
-					_sound.toplay.push("dirchange")
+					playsound("dirchange")
 					ball.x := this.x + this.w*0.10
 					ball.dir := "l"
 				}
@@ -447,7 +447,7 @@ class class_rotator extends class_fieldPrototype
 				}
 				else
 				{
-					_sound.toplay.push("dirchange")
+					playsound("dirchange")
 					ball.x := this.x + this.w*0.90
 					ball.dir := "r"
 				}
@@ -466,7 +466,7 @@ class class_rotator extends class_fieldPrototype
 				}
 				else
 				{
-					_sound.toplay.push("dirchange")
+					playsound("dirchange")
 					ball.y := this.y + this.h*0.90
 					ball.dir := "d"
 				}
@@ -485,7 +485,7 @@ class class_rotator extends class_fieldPrototype
 				}
 				else
 				{
-					_sound.toplay.push("dirchange")
+					playsound("dirchange")
 					ball.y := this.y + this.h*0.10
 					ball.dir := "u"
 				}
@@ -524,7 +524,7 @@ class class_rotator extends class_fieldPrototype
 							this.ball_r:=""
 						}
 						this.needRedraw:=true ;redraw element. otherwise the ball will not be visible removed
-						_sound.toplay.push("r")
+						playsound("r")
 						return
 					}
 				}
@@ -541,7 +541,7 @@ class class_rotator extends class_fieldPrototype
 							this.ball_l:=""
 						}
 						this.needRedraw:=true
-						_sound.toplay.push("go")
+						playsound("go")
 						return
 					}
 				}
@@ -557,7 +557,7 @@ class class_rotator extends class_fieldPrototype
 							this.ball_u:=""
 						}
 						this.needRedraw:=true
-						_sound.toplay.push("go")
+						playsound("go")
 						return
 					}
 				}
@@ -573,7 +573,7 @@ class class_rotator extends class_fieldPrototype
 							this.ball_d:=""
 						}
 						this.needRedraw:=true
-						_sound.toplay.push("go")
+						playsound("go")
 						return
 					}
 				}
@@ -588,7 +588,7 @@ class class_rotator extends class_fieldPrototype
 				this.rotating:=true
 				this.rotatingDir:="l"
 				this.rotatingAngle:=0 ;angle is 0, because the function actionAlwaysWithoutBall() will be called in the same iteration
-				_sound.toplay.push("rotate")
+				playsound("rotate")
 			}
 			else ;if already rotating
 			{
@@ -639,7 +639,7 @@ class class_rotator extends class_fieldPrototype
 			ball.needRedraw:=True
 			
 			this.calcBallPos(ball)
-			_sound.toplay.push("dock")
+			playsound("dock")
 			
 			;after a ball was added, check wheter the condition is fulfilled to explode
 			this.checkWhetherToExplode()
@@ -738,11 +738,56 @@ class class_rotator extends class_fieldPrototype
 			{
 				this.GoalNotReached:=false
 			}
-			_sound.toplay.push("explode")
+			playsound("explode")
 			this.exploding:=true
 			this.explodingStep:=1
 			this.NeedRedraw:=true
 		}
+	}
+	
+	winanimation_init()
+	{
+	}
+	winanimation()
+	{
+		if (not this.exploding)
+		{
+			random,randomvar,1,30
+			if (randomvar=1)
+			{
+				playsound("explode")
+				this.exploding:=true
+				this.explodingStep:=1
+				this.NeedRedraw:=true
+			}
+		}
+		this.actionAlwaysWithoutBall()
+	}	
+	looseanimation_init()
+	{
+		
+	}
+	looseanimation()
+	{
+		if (this.rotating= false) ;if no rotating
+		{	
+			random,randomvar,1,20
+			if (randomvar=1)
+			{
+				random,randomdir,1,2
+				if randomdir = 1
+					randomdir = l
+				else 
+					randomdir=r
+				;Start rotating
+				this.rotating:=true
+				this.rotatingDir:=randomdir
+				this.rotatingAngle:=0 ;angle is 0, because the function actionAlwaysWithoutBall() will be called in the same iteration
+			}
+		}
+		random,randomvar,1,10
+		if (randomvar=1)
+			this.actionAlwaysWithoutBall()
 	}
 }
 
@@ -847,7 +892,7 @@ class class_pass extends class_fieldPrototype
 	{
 		this.addball(ball,"u")
 		
-		_sound.toplay.push("dock")
+		playsound("dock")
 		ball.x:=this.mx
 		ball.y:=this.y+1
 		ball.dir:="d"
@@ -933,7 +978,7 @@ class class_teleporter extends class_fieldPrototype
 			{
 				if (onefield!=this and (substr(onefield.type,1,2)="th" or substr(onefield.type,1,2)="tb"))
 				{
-					_sound.toplay.push("teleport")
+					playsound("teleport")
 					ball.x:=onefield.x + onefield.w/2 +2
 					ball.y:=onefield.y + onefield.h/2
 				}
@@ -942,7 +987,7 @@ class class_teleporter extends class_fieldPrototype
 			{
 				if (onefield!=this and (substr(onefield.type,1,2)="th" or substr(onefield.type,1,2)="tb"))
 				{
-					_sound.toplay.push("teleport")
+					playsound("teleport")
 					ball.x:=onefield.x + onefield.w/2 -2
 					ball.y:=onefield.y + onefield.h/2
 				}
@@ -951,7 +996,7 @@ class class_teleporter extends class_fieldPrototype
 			{
 				if (onefield!=this and (substr(onefield.type,1,2)="tv" or substr(onefield.type,1,2)="tb"))
 				{
-					_sound.toplay.push("teleport")
+					playsound("teleport")
 					ball.x:=onefield.x + onefield.w/2
 					ball.y:=onefield.y + onefield.h/2 +2
 				}
@@ -960,7 +1005,7 @@ class class_teleporter extends class_fieldPrototype
 			{
 				if (onefield!=this and (substr(onefield.type,1,2)="tv" or substr(onefield.type,1,2)="tb"))
 				{
-					_sound.toplay.push("teleport")
+					playsound("teleport")
 					ball.x:=onefield.x + onefield.w/2
 					ball.y:=onefield.y + onefield.h/2 -2
 				}
@@ -1083,7 +1128,7 @@ class class_blocker extends class_fieldPrototype
 		;if ball has not the same color, reject it and move it back
 		if (ball.color != this.color)
 		{
-			_sound.toplay.push("dirchange")
+			playsound("dirchange")
 			if (ball.dir = "d")
 			{
 				ball.dir := "u"
@@ -1159,7 +1204,7 @@ class class_paint extends class_fieldPrototype
 		;if ball has not the same color, color it
 		if (ball.color != this.color)
 		{
-			_sound.toplay.push("colorize")
+			playsound("colorize")
 			ball.color:=this.color
 		}
 	}
@@ -1209,7 +1254,7 @@ class class_arrow extends class_fieldPrototype
 		;if ball has not the direction, turn it
 		if (ball.dir != this.dir)
 		{
-			_sound.toplay.push("dirchange")
+			playsound("dirchange")
 			ball.dir:=this.dir
 			
 			if (this.dir = "u")

@@ -20,42 +20,46 @@ gui_menu_init()
 	gui,-dpiscale
 	gui,+HwndMainGuiHWND
 	gui,font,s30
-	gui,add,text, xm ym, PABI Logical
+	gui,add,text, xm ym w300, PABI Logical
 	gui,font,s20
 	gui,add,text, xm Y+10 w300 vGUIMainMenuHint, Hello
 	gui,font,s12
-	gui,add,text, xm Y+10, Level set
-	gui,add,DropDownList, X+10 yp vGUIMainMenuLevelSet gGUIMainMenuLevelSet
+	gui,add,text, xm Y+10 w150, Level set
+	gui,add,DropDownList, x150 yp w150 vGUIMainMenuLevelSet gGUIMainMenuLevelSet
 	guicontrol,,GUIMainMenuLevelSet,%GUIMainMenuLevelSet%
 	if (lastSelectedLevelSet)
 		guicontrol,ChooseString,GUIMainMenuLevelSet,%lastSelectedLevelSet%
 	else
 		guicontrol,Choose,GUIMainMenuLevelSet,1
-	gui,add,text, xm Y+10, Level
-	gui,add,DropDownList, X+10 yp vGUIMainMenuLevel gGUIMainMenuLevel
+	gui,add,text, xm Y+10 w150, Level
+	gui,add,DropDownList, x150 yp w150 vGUIMainMenuLevel gGUIMainMenuLevel
 	gui_menu_reloadLevels(lastSelectedLevel)
 	gui,font,s30
 	gui,add,button,xm0 Y+20 w300 h100 gGUIMainMenubuttonStart default,Start
-	gui,font,s10
 	
 	;Settings
-	gui,add,text, xm Y+10, Background music
+	gui,font,s8
+	gui,add,text, xm Y+30 w150, Background music
 	availableMusic:=""
-	loop, files, sounds\background music\*
+	supportedMusicFormats:=["mp3", "wav"]
+	for oneidx, onemusicFormat in supportedMusicFormats
 	{
-		availableMusic.="|"A_LoopFileName
-		if not backgroundMusic
+		loop, files, sounds\background music\*.%onemusicFormat%
 		{
-			backgroundMusic:=A_LoopFileName
+			availableMusic.="|"A_LoopFileName
+			if not backgroundMusic
+			{
+				backgroundMusic:=A_LoopFileName
+			}
 		}
 	}
 	
-	gui,add,DropDownList, X+10 yp vGUIMainMenuBackgroundMusic gGUIMainMenuBackgroundMusic
+	gui,add,DropDownList, x150 yp w150 vGUIMainMenuBackgroundMusic gGUIMainMenuBackgroundMusic
 	guicontrol,,GUIMainMenuBackgroundMusic,% availableMusic
 	guicontrol,choosestring,GUIMainMenuBackgroundMusic,%backgroundMusic%
 	_sound.backgroundmusic:=backgroundMusic
 	
-	gui,add,text, xm Y+10, Sound pack
+	gui,add,text, xm Y+10 w150, Sound pack
 	availableSoundPacks:=""
 	loop, files, sounds\*,D
 	{
@@ -69,12 +73,12 @@ gui_menu_init()
 		}
 	}
 	
-	gui,add,DropDownList, X+10 yp vGUIMainMenuSoundPack gGUIMainMenuSoundPack
+	gui,add,DropDownList, x150 yp w150 vGUIMainMenuSoundPack gGUIMainMenuSoundPack
 	guicontrol,,GUIMainMenuSoundPack,% availableSoundPacks
 	guicontrol,choosestring,GUIMainMenuSoundPack,%SoundPack%
 	_sound.SoundPack:=SoundPack
 	
-	gui,add,text, xm Y+10, Design
+	gui,add,text, xm Y+10 w150, Design
 	availableopticalDesigns:=""
 	loop, files, pictures\*,D
 	{
@@ -85,12 +89,13 @@ gui_menu_init()
 		}
 	}
 	
-	gui,add,DropDownList, X+10 yp vGUIMainMenuopticalDesign gGUIMainMenuopticalDesign
+	gui,add,DropDownList, x150 yp w150 vGUIMainMenuopticalDesign gGUIMainMenuopticalDesign
 	guicontrol,,GUIMainMenuopticalDesign,% availableopticalDesigns
 	guicontrol,choosestring,GUIMainMenuopticalDesign,%opticalDesign%
 	_share.opticalDesign:=opticalDesign
 	_share.needInitDesign:=true
 	
+	gui,add,button,xm Y+10 w100 h25 gGUI_About,About
 	gui,show,hide, PABI Logical
 	return
 	

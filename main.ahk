@@ -18,6 +18,7 @@ OnExit,exit
 #include game\gui.ahk
 #include menu\menu_gui.ahk
 #include menu\achievements.ahk
+#include menu\about.ahk
 #include debug\debug.ahk
 
 global MainGuiHWND, MainGuiDC
@@ -163,6 +164,7 @@ Thread_StoppAll()
 			AhkThread%threadID%.ahkterminate(-1)
 	}
 }
+
 
 
 exit:
