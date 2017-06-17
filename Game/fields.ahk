@@ -522,9 +522,9 @@ class class_rotator extends class_fieldPrototype
 							_balls[this.ball_r].needRedraw:=True
 							_balls[this.ball_r].needAlwaysRedraw:=True
 							this.ball_r:=""
+							this.needRedraw:=true ;redraw element. otherwise the ball will not be visible removed
+							playsound("go")
 						}
-						this.needRedraw:=true ;redraw element. otherwise the ball will not be visible removed
-						playsound("r")
 						return
 					}
 				}
@@ -539,9 +539,9 @@ class class_rotator extends class_fieldPrototype
 							_balls[this.ball_l].needRedraw:=True
 							_balls[this.ball_l].needAlwaysRedraw:=True
 							this.ball_l:=""
+							this.needRedraw:=true
+							playsound("go")
 						}
-						this.needRedraw:=true
-						playsound("go")
 						return
 					}
 				}
@@ -555,9 +555,9 @@ class class_rotator extends class_fieldPrototype
 							_balls[this.ball_u].dir:="u"
 							_balls[this.ball_u].needAlwaysRedraw:=True
 							this.ball_u:=""
+							this.needRedraw:=true
+							playsound("go")
 						}
-						this.needRedraw:=true
-						playsound("go")
 						return
 					}
 				}
@@ -571,9 +571,9 @@ class class_rotator extends class_fieldPrototype
 							_balls[this.ball_d].dir:="d"
 							_balls[this.ball_d].needAlwaysRedraw:=True
 							this.ball_d:=""
+							this.needRedraw:=true
+							playsound("go")
 						}
-						this.needRedraw:=true
-						playsound("go")
 						return
 					}
 				}
