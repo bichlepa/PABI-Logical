@@ -25,17 +25,17 @@ gui_menu_init()
 	gui,add,text, xm Y+10 w300 vGUIMainMenuHint, Hello
 	gui,font,s12
 	gui,add,text, xm Y+10 w150, Level set
-	gui,add,DropDownList, x150 yp w150 vGUIMainMenuLevelSet gGUIMainMenuLevelSet
+	gui,add,DropDownList, x150 yp w200 vGUIMainMenuLevelSet gGUIMainMenuLevelSet
 	guicontrol,,GUIMainMenuLevelSet,%GUIMainMenuLevelSet%
 	if (lastSelectedLevelSet)
 		guicontrol,ChooseString,GUIMainMenuLevelSet,%lastSelectedLevelSet%
 	else
 		guicontrol,Choose,GUIMainMenuLevelSet,1
 	gui,add,text, xm Y+10 w150, Level
-	gui,add,DropDownList, x150 yp w150 vGUIMainMenuLevel gGUIMainMenuLevel
+	gui,add,DropDownList, x150 yp w200 vGUIMainMenuLevel gGUIMainMenuLevel
 	gui_menu_reloadLevels(lastSelectedLevel)
 	gui,font,s30
-	gui,add,button,xm0 Y+20 w300 h100 gGUIMainMenubuttonStart default,Start
+	gui,add,button,xm Y+20 w300 h100 gGUIMainMenubuttonStart default,Start
 	
 	;Settings
 	gui,font,s8
@@ -54,7 +54,7 @@ gui_menu_init()
 		}
 	}
 	
-	gui,add,DropDownList, x150 yp w150 vGUIMainMenuBackgroundMusic gGUIMainMenuBackgroundMusic
+	gui,add,DropDownList, x150 yp w200 vGUIMainMenuBackgroundMusic gGUIMainMenuBackgroundMusic
 	guicontrol,,GUIMainMenuBackgroundMusic,% "|off" availableMusic
 	guicontrol,choosestring,GUIMainMenuBackgroundMusic,%backgroundMusic%
 	_sound.backgroundmusic:=backgroundMusic
@@ -73,7 +73,7 @@ gui_menu_init()
 		}
 	}
 	
-	gui,add,DropDownList, x150 yp w150 vGUIMainMenuSoundPack gGUIMainMenuSoundPack
+	gui,add,DropDownList, x150 yp w200 vGUIMainMenuSoundPack gGUIMainMenuSoundPack
 	guicontrol,,GUIMainMenuSoundPack,% "|off" availableSoundPacks
 	guicontrol,choosestring,GUIMainMenuSoundPack,%SoundPack%
 	_sound.SoundPack:=SoundPack
@@ -89,7 +89,7 @@ gui_menu_init()
 		}
 	}
 	
-	gui,add,DropDownList, x150 yp w150 vGUIMainMenuopticalDesign gGUIMainMenuopticalDesign
+	gui,add,DropDownList, x150 yp w200 vGUIMainMenuopticalDesign gGUIMainMenuopticalDesign
 	guicontrol,,GUIMainMenuopticalDesign,% availableopticalDesigns
 	guicontrol,choosestring,GUIMainMenuopticalDesign,%opticalDesign%
 	_share.opticalDesign:=opticalDesign
