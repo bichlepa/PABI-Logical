@@ -17,8 +17,8 @@ gui_play_init()
 	gui +lastfound
 	gui,+HwndMainGuiHWND
 	
-	widthofguipic:=800
-	heightofguipic:=800
+	widthofguipic:=0.9*A_ScreenWidth
+	heightofguipic:=0.9*A_ScreenHeight
 	gui,show, hide w%widthofguipic% h%heightofguipic%
 	
 	_share.MainGuiHWND := MainGuiHWND

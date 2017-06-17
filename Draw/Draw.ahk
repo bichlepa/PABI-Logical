@@ -169,7 +169,7 @@ draw()
 	static oldIterationTimer
 	
 	Font:="Arial"
-	TextOptions:=" s" 30 " Center vCenter cffffffff  Bold"
+	TextOptions:=" Center vCenter cffffffff  Bold"
 	
 	if (oldGUI_W!=_share.widthofguipic or oldGUI_H!=_share.heightofguipic)
 	{
@@ -266,7 +266,7 @@ draw()
 					;Draw info: current time
 					if (onelement = fieldCopy.info_TimeLeft)
 					{
-						Gdip_TextToGraphics(g_background_G, fieldCopy.info_TimeLeft.timetoShow, "x" ((fieldCopy.info_TimeLeft.x ) * factor) " y" ((fieldCopy.info_TimeLeft.y) * factor) " w" ((fieldCopy.info_TimeLeft.w )* factor) "h" ((fieldCopy.info_TimeLeft.h ) * factor)   TextOptions, Font)
+						Gdip_TextToGraphics(g_background_G, fieldCopy.info_TimeLeft.timetoShow, "x" ((fieldCopy.info_TimeLeft.x ) * factor) " y" ((fieldCopy.info_TimeLeft.y) * factor) " w" ((fieldCopy.info_TimeLeft.w )* factor) "h" ((fieldCopy.info_TimeLeft.h ) * factor) " s" (0.25 *fieldCopy.info_TimeLeft.h * factor) TextOptions, Font)
 					}
 					;Draw info: next ball color
 					else if (onelement = fieldCopy.info_NextBall)
