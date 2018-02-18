@@ -7,7 +7,7 @@ SetBatchLines, -1
 #Persistent
 
 #include draw\draw.ahk
-#include <gdip>
+#include lib\gdip.ahk
 #include lib\Object to file\String-object-file.ahk
 #include debug\debug.ahk
 ;~ d(_field, "ihöi")
